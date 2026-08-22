@@ -1,0 +1,7 @@
+{
+  "$schema": "https://baditaflorin.github.io/mesh-common/mesh-service.schema.json",
+  "id": "mesh-milestone-map",
+  "category": "Productivity",
+  "subcategory": "Coordination & planning",
+  "useCases": ["project planning", "team retrospectives", "learning goals"]
+}
