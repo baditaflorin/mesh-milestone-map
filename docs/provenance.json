@@ -1,7 +1,8 @@
 {
   "schemaVersion": 1,
   "app": "mesh-milestone-map",
-  "sourceCommit": "ba3fe77d32fe5b02247ca0c8564c3fb8de4ccc04",
-  "releaseCommit": "ba3fe77d32fe5b02247ca0c8564c3fb8de4ccc04",
-  "recordedAt": "2026-08-26T04:44:33Z"
+  "sourceCommit": "973aa483e8a9e278767d7eb466638beb8622ea8b",
+  "releaseCommit": "973aa483e8a9e278767d7eb466638beb8622ea8b",
+  "meshCommonCommit": "025f7ff72e50c4b54a3f4a2d8c88f4f600dec78f",
+  "recordedAt": "2026-08-26T17:42:03Z"
 }
