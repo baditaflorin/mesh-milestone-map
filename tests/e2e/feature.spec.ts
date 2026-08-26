@@ -19,6 +19,13 @@ test("two planners add and complete the same shared path", async ({ browser, bas
 
     await expect(a.getByLabel("Next milestone")).toBeVisible();
     await expect(b.getByLabel("Next milestone")).toBeVisible();
+    // BroadcastChannel can relay CRDT updates before numeric awareness counts
+    // settle. The live room copy must therefore stay neutral for both real
+    // peers instead of incorrectly claiming either is alone.
+    await expect(a.locator(".pathline-room-status strong")).toHaveText("Plan ready to share");
+    await expect(b.locator(".pathline-room-status strong")).toHaveText("Plan ready to share");
+    await expect(a.getByText("You are the first planner here")).toHaveCount(0);
+    await expect(b.getByText("You are the first planner here")).toHaveCount(0);
 
     await a.getByLabel("Next milestone").fill(first);
     await a.getByRole("button", { name: /create first milestone/i }).click();

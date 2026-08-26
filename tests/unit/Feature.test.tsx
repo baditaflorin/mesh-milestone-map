@@ -31,4 +31,12 @@ describe("Pathline planning surface", () => {
     render(<Feature room={null} config={config} />);
     expect(screen.getByText("Opening the shared plan…")).toBeInTheDocument();
   });
+
+  it("keeps active room presence neutral when awareness has no reliable count", () => {
+    const room = createMockRoom();
+    render(<Feature room={room} config={config} />);
+
+    expect(screen.getByText("Plan ready to share")).toBeInTheDocument();
+    expect(screen.queryByText("You are the first planner here")).not.toBeInTheDocument();
+  });
 });

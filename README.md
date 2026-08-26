@@ -23,8 +23,8 @@ same peer-to-peer document.
 - **A real first decision.** The next-milestone field and its create action
   remain visible at `390×844` and `1141×602`.
 - **Truthful shared state.** Before a room exists, the UI says it is preparing
-  the room; after it exists, it reports the actual awareness peer count rather
-  than a fabricated connection claim.
+  the room; after it exists, it shows a neutral ready-to-share state rather
+  than claiming an unreliable numeric presence count.
 - **Accessible planning.** The milestone field, completion controls, progress
   bar, and Settings drawer have semantic labels and keyboard coverage.
 - **Peer-to-peer by design.** There is no app backend. The list and completion

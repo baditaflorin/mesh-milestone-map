@@ -12,11 +12,10 @@ export function Feature({ room, config }: Props) {
   const progress = total ? Math.round((done / total) * 100) : 0;
   const canAdd = Boolean(room && label.trim());
   const productName = config.displayName ?? "Pathline";
-  const roomCopy = !room
-    ? "Opening the shared plan…"
-    : room.peerCount === 0
-      ? "You are the first planner here"
-      : `${room.peerCount + 1} planners are shaping this path`;
+  // Awareness counts are transport-dependent: BroadcastChannel peers can
+  // merge milestones before numeric awareness catches up. Keep this state
+  // useful without making an inaccurate claim about who is currently present.
+  const roomCopy = room ? "Plan ready to share" : "Opening the shared plan…";
 
   function addMilestone() {
     if (shared.add(label)) setLabel("");
