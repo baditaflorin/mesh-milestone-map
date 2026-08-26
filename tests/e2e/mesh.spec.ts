@@ -1,11 +1,9 @@
 import { expect, test, type Page } from "@playwright/test";
 import { openTwoPeers } from "@baditaflorin/mesh-common/testing";
-import { readFileSync } from "node:fs";
 
-const pkg = JSON.parse(readFileSync(new URL("../../package.json", import.meta.url), "utf8")) as {
-  name: string;
-};
-const storagePrefix = pkg.name;
+// Pathline deliberately retains this established storage/Yjs namespace so
+// existing room links survive the visual product rename.
+const storagePrefix = "Milestone Map";
 
 async function closeInitiallyOpenSettings(page: Page): Promise<void> {
   const settings = page.getByRole("dialog", { name: "Settings" });
@@ -34,13 +32,12 @@ test("two peers in the same room can both load", async ({ browser, baseURL }) =>
     // accessibility tree. Close it on each peer before asserting the shared
     // app surface, without changing the app's onboarding behavior.
     await Promise.all([closeInitiallyOpenSettings(a), closeInitiallyOpenSettings(b)]);
-    await expect(a.locator(".mesh-self-ref, .self-ref").first()).toBeVisible();
-    await expect(b.locator(".mesh-self-ref, .self-ref").first()).toBeVisible();
-    // Both should reach a non-loading state within the timeout — most apps
-    // either show a count, a heading, or a primary control. We assert that
-    // at least one <h1> is present on both pages.
-    await expect(a.getByRole("heading", { level: 1 }).first()).toBeVisible();
-    await expect(b.getByRole("heading", { level: 1 }).first()).toBeVisible();
+    // Both peers reach the planning surface and its actual first action,
+    // rather than a generic mesh footer. The room remains feature-owned.
+    await expect(a.getByRole("heading", { name: "Pathline" })).toBeVisible();
+    await expect(b.getByRole("heading", { name: "Pathline" })).toBeVisible();
+    await expect(a.getByRole("button", { name: /create first milestone/i })).toBeVisible();
+    await expect(b.getByRole("button", { name: /create first milestone/i })).toBeVisible();
   } finally {
     await cleanup();
   }

@@ -1,8 +1,19 @@
-/* App-local styles. Mesh chrome (settings drawer, self-ref bar) is provided by
- * @baditaflorin/mesh-common/styles.css imported in main.tsx. */
+/* Product-local planning surface. Shared MeshShell chrome and its settings
+ * sheet remain provided by @baditaflorin/mesh-common/styles.css. */
 
 :root {
   color-scheme: dark;
+  --path-ink: #f1f5f9;
+  --path-muted: #aebccc;
+  --path-deep: #10151d;
+  --path-panel: #18222e;
+  --path-panel-raised: #202c3a;
+  --path-line: rgb(174 195 218 / 19%);
+  --path-blue: #7ea5ff;
+  --path-blue-bright: #b7caff;
+  --path-mint: #7bd5b2;
+  --path-gold: #e6b65f;
+  --path-shadow: 0 1.25rem 3.5rem rgb(0 0 0 / 23%);
 }
 
 * {
@@ -12,107 +23,596 @@
 html,
 body,
 #root {
-  margin: 0;
-  padding: 0;
-  height: 100%;
   width: 100%;
-  background: var(--mesh-bg);
-  color: var(--mesh-fg);
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+  height: 100%;
+  min-height: 100%;
+  margin: 0;
+  background: var(--path-deep);
+  color: var(--path-ink);
+  font-family:
+    Inter,
+    ui-sans-serif,
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
   -webkit-tap-highlight-color: transparent;
+  overscroll-behavior: none;
 }
 
-.feature-placeholder {
-  padding: 6rem 1.5rem 2rem;
-  text-align: center;
+button,
+input {
+  font: inherit;
+}
+
+button {
+  touch-action: manipulation;
+}
+
+button:focus-visible,
+input:focus-visible,
+a:focus-visible {
+  outline: 3px solid color-mix(in srgb, var(--path-blue-bright) 78%, white);
+  outline-offset: 3px;
+}
+
+/* Pathline owns its utility bar. Keep the shell's real Invite, Settings, and
+ * lifecycle controls, but remove the framework eyebrow so the product does
+ * not read as a generic Mesh template. */
+.mesh-app-root[data-mesh-app-id="Milestone Map"] .mesh-app-bar-brand {
+  gap: 0.42rem;
+}
+
+.mesh-app-root[data-mesh-app-id="Milestone Map"] .mesh-app-bar-eyebrow {
+  display: none;
+}
+
+.pathline {
+  width: min(100%, 78rem);
+  height: 100%;
+  min-height: 0;
+  margin: 0 auto;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: 1rem;
+  gap: clamp(0.6rem, 1.25vh, 0.9rem);
+  overflow: auto;
+  padding: clamp(0.85rem, 2.2vw, 1.65rem) clamp(0.85rem, 3vw, 2rem)
+    max(3.8rem, env(safe-area-inset-bottom));
+  background:
+    radial-gradient(circle at 0% 0%, rgb(126 165 255 / 12%), transparent 24rem),
+    radial-gradient(circle at 100% 100%, rgb(123 213 178 / 7%), transparent 30rem);
+  scrollbar-color: rgb(126 165 255 / 35%) transparent;
 }
 
-.feature-placeholder h1 {
-  font-size: 1.6rem;
-  margin: 0;
-  color: var(--mesh-accent);
+.pathline-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(15.5rem, 0.47fr);
+  align-items: end;
+  gap: clamp(1rem, 3vw, 2.4rem);
 }
 
-.feature-placeholder p {
-  max-width: 32rem;
+.pathline-eyebrow,
+.pathline-room-label {
   margin: 0;
-  opacity: 0.85;
+  color: var(--path-blue-bright);
+  font-size: 0.67rem;
+  font-weight: 760;
+  letter-spacing: 0.13em;
+  line-height: 1.35;
+  text-transform: uppercase;
+}
+
+.pathline-hero h1 {
+  margin: 0.22rem 0 0;
+  color: var(--path-ink);
+  font-size: clamp(2.15rem, 4.35vw, 3.8rem);
+  font-weight: 710;
+  letter-spacing: -0.06em;
+  line-height: 0.95;
+}
+
+.pathline-lede {
+  max-width: 43rem;
+  margin: 0.65rem 0 0;
+  color: var(--path-muted);
+  font-size: clamp(0.9rem, 1.7vw, 1.08rem);
   line-height: 1.5;
 }
 
-.feature-status {
-  font-size: 0.85rem;
-  opacity: 0.6;
+.pathline-room-status {
+  min-width: 0;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  column-gap: 0.55rem;
+  row-gap: 0.2rem;
+  padding: 0.75rem 0.82rem;
+  border: 1px solid var(--path-line);
+  border-radius: 0.9rem;
+  background: rgb(21 31 43 / 74%);
+  box-shadow: 0 0.65rem 1.8rem rgb(0 0 0 / 12%);
+}
+
+.pathline-live-dot {
+  width: 0.52rem;
+  height: 0.52rem;
+  grid-row: 1 / span 2;
+  border-radius: 999px;
+  background: var(--path-mint);
+  box-shadow: 0 0 0 0.28rem rgb(123 213 178 / 11%);
+}
+
+.pathline-live-dot.is-pending {
+  background: var(--path-gold);
+  box-shadow: 0 0 0 0.28rem rgb(230 182 95 / 10%);
+}
+
+.pathline-room-status div {
+  min-width: 0;
+  display: grid;
+  gap: 0.1rem;
+}
+
+.pathline-room-status strong {
+  overflow: hidden;
+  color: var(--path-ink);
+  font-size: 0.78rem;
+  font-weight: 650;
+  line-height: 1.35;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.pathline-room-status code {
+  grid-column: 1 / -1;
+  overflow: hidden;
+  padding-top: 0.42rem;
+  border-top: 1px solid rgb(174 195 218 / 11%);
+  color: var(--path-muted);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 0.66rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.pathline-planning-card {
+  padding: clamp(0.85rem, 1.9vw, 1.25rem);
+  border: 1px solid var(--path-line);
+  border-radius: 1.05rem;
+  background: linear-gradient(120deg, rgb(30 45 61 / 94%), rgb(21 32 44 / 96%)), var(--path-panel);
+  box-shadow: var(--path-shadow);
+}
+
+.pathline-overview {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.pathline-overview h2,
+.pathline-timeline h2 {
+  margin: 0.18rem 0 0;
+  color: var(--path-ink);
+  font-size: clamp(1.05rem, 2.1vw, 1.35rem);
+  font-weight: 690;
+  letter-spacing: -0.035em;
+  line-height: 1.2;
+}
+
+.pathline-metric {
+  min-width: 3.7rem;
+  display: grid;
+  justify-items: end;
+  color: var(--path-muted);
+  font-size: 0.64rem;
+  font-weight: 650;
+  letter-spacing: 0.08em;
+  line-height: 1.1;
+  text-transform: uppercase;
+}
+
+.pathline-metric strong {
+  color: var(--path-blue-bright);
+  font-size: clamp(1.3rem, 2.6vw, 1.85rem);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.07em;
+}
+
+.pathline-progress {
+  width: 100%;
+  height: 0.35rem;
+  overflow: hidden;
+  margin: 0.78rem 0;
+  border-radius: 999px;
+  background: rgb(174 195 218 / 13%);
+}
+
+.pathline-progress span {
+  display: block;
+  width: 0;
+  height: 100%;
+  min-width: 0;
+  border-radius: inherit;
+  background: linear-gradient(90deg, var(--path-blue), var(--path-mint));
+  box-shadow: 0 0 0.75rem rgb(126 165 255 / 45%);
+  transition: width 180ms ease;
+}
+
+.pathline-entry-form {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: end;
+  gap: 0.65rem;
+}
+
+.pathline-entry-form label {
+  min-width: 0;
+  display: grid;
+  gap: 0.32rem;
+}
+
+.pathline-entry-form label > span {
+  color: var(--path-muted);
+  font-size: 0.69rem;
+  font-weight: 680;
+  letter-spacing: 0.045em;
+}
+
+.pathline-entry-form input {
+  min-width: 0;
+  min-height: 2.7rem;
+  padding: 0.62rem 0.75rem;
+  border: 1px solid rgb(174 195 218 / 18%);
+  border-radius: 0.67rem;
+  background: rgb(9 18 27 / 47%);
+  color: var(--path-ink);
+  font-size: 0.88rem;
+}
+
+.pathline-entry-form input::placeholder {
+  color: rgb(174 188 204 / 54%);
+}
+
+.pathline-entry-form input:focus {
+  border-color: rgb(126 165 255 / 65%);
+}
+
+.pathline-entry-form button {
+  min-height: 2.7rem;
+  padding: 0.62rem 0.95rem;
+  border: 1px solid rgb(202 216 255 / 34%);
+  border-radius: 0.67rem;
+  background: linear-gradient(135deg, #a7beff, #7898eb);
+  box-shadow: 0 0.5rem 1.15rem rgb(0 0 0 / 15%);
+  color: #0e192b;
+  cursor: pointer;
+  font-size: 0.8rem;
+  font-weight: 780;
+  white-space: nowrap;
+  transition:
+    filter 140ms ease,
+    transform 140ms ease;
+}
+
+.pathline-entry-form button:hover:not(:disabled) {
+  filter: brightness(1.06);
+  transform: translateY(-1px);
+}
+
+.pathline-entry-form button:disabled {
+  cursor: not-allowed;
+  filter: saturate(0.3);
+  opacity: 0.48;
+}
+
+.pathline-timeline {
+  min-height: 0;
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  gap: 0.65rem;
+  padding: clamp(0.25rem, 0.8vw, 0.55rem) 0;
+}
+
+.pathline-timeline-header {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.pathline-remaining {
+  margin: 0;
+  color: var(--path-muted);
+  font-size: 0.76rem;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.pathline-list {
+  min-height: 0;
+  display: grid;
+  gap: 0.5rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.pathline-list li {
+  position: relative;
+}
+
+.pathline-list li:not(:last-child)::before {
+  position: absolute;
+  top: calc(100% - 0.15rem);
+  left: 1.32rem;
+  z-index: 0;
+  width: 1px;
+  height: 0.78rem;
+  background: rgb(174 195 218 / 28%);
+  content: "";
+}
+
+.pathline-milestone {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  min-height: 4.45rem;
+  display: grid;
+  grid-template-columns: 2.1rem minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0.7rem;
+  padding: 0.65rem 0.8rem;
+  border: 1px solid var(--path-line);
+  border-radius: 0.85rem;
+  background: linear-gradient(120deg, rgb(26 38 51 / 92%), rgb(19 29 40 / 94%));
+  color: var(--path-ink);
+  cursor: pointer;
+  text-align: left;
+  transition:
+    background 140ms ease,
+    border-color 140ms ease,
+    transform 140ms ease;
+}
+
+.pathline-milestone:hover {
+  border-color: rgb(126 165 255 / 47%);
+  background: linear-gradient(120deg, rgb(33 49 67 / 98%), rgb(20 33 47 / 98%));
+  transform: translateX(2px);
+}
+
+.pathline-marker {
+  width: 2.05rem;
+  height: 2.05rem;
+  display: grid;
+  place-items: center;
+  border: 1px solid rgb(126 165 255 / 36%);
+  border-radius: 999px;
+  background: rgb(126 165 255 / 11%);
+  color: var(--path-blue-bright);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 0.69rem;
+  font-weight: 770;
   font-variant-numeric: tabular-nums;
 }
 
-.entry-form,
-.panel {
-  width: min(100%, 34rem);
-  text-align: left;
-}
-.entry-form label {
-  display: block;
-  font-weight: 700;
-  margin-bottom: 0.45rem;
-}
-.entry-form div {
-  display: flex;
-  gap: 0.5rem;
-}
-input {
+.pathline-milestone-copy {
   min-width: 0;
-  flex: 1;
-  padding: 0.7rem 0.8rem;
-  border-radius: 0.55rem;
-  border: 1px solid #4b5563;
-  background: #111827;
-  color: inherit;
+  display: grid;
+  gap: 0.18rem;
 }
-button {
-  border: 0;
-  border-radius: 0.55rem;
-  padding: 0.7rem 0.9rem;
-  background: var(--mesh-accent);
-  color: #062a28;
-  cursor: pointer;
-  font-weight: 700;
+
+.pathline-milestone-copy strong {
+  overflow: hidden;
+  color: var(--path-ink);
+  font-size: 0.88rem;
+  font-weight: 690;
+  line-height: 1.3;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
-.panel {
-  border: 1px solid #374151;
-  border-radius: 0.9rem;
-  padding: 1rem 1.25rem;
-  background: rgba(17, 24, 39, 0.75);
+
+.pathline-milestone-copy span {
+  color: var(--path-muted);
+  font-size: 0.7rem;
+  line-height: 1.3;
 }
-.panel h2 {
-  margin: 0;
-  font-size: 1rem;
+
+.pathline-toggle-label {
+  color: var(--path-blue-bright);
+  font-size: 0.68rem;
+  font-weight: 680;
+  white-space: nowrap;
 }
-.panel ol {
-  margin: 0.75rem 0 0;
-  padding-left: 1.35rem;
+
+.pathline-list .is-complete .pathline-milestone {
+  border-color: rgb(123 213 178 / 32%);
+  background: linear-gradient(120deg, rgb(27 56 59 / 76%), rgb(17 39 45 / 88%));
 }
-.panel li {
-  padding: 0.35rem 0;
+
+.pathline-list .is-complete .pathline-marker {
+  border-color: rgb(123 213 178 / 50%);
+  background: rgb(123 213 178 / 17%);
+  color: var(--path-mint);
 }
-.panel label {
-  cursor: pointer;
-}
-.panel input[type="checkbox"] {
-  width: 1rem;
-  height: 1rem;
-  accent-color: var(--mesh-accent);
-  vertical-align: middle;
-}
-.complete span {
-  opacity: 0.6;
+
+.pathline-list .is-complete .pathline-milestone-copy strong {
+  color: rgb(230 244 238 / 70%);
   text-decoration: line-through;
+  text-decoration-color: rgb(123 213 178 / 52%);
 }
-.hint {
-  font-size: 0.9rem;
-  opacity: 0.75;
+
+.pathline-list .is-complete .pathline-toggle-label {
+  color: var(--path-mint);
+}
+
+.pathline-empty {
+  min-height: clamp(8.4rem, 23vh, 13.5rem);
+  display: grid;
+  grid-template-columns: 2.6rem minmax(0, 1fr);
+  align-items: center;
+  gap: 0.85rem;
+  padding: clamp(1rem, 3vw, 1.65rem);
+  border: 1px dashed rgb(174 195 218 / 29%);
+  border-radius: 1rem;
+  background: rgb(17 26 37 / 46%);
+}
+
+.pathline-empty > span {
+  align-self: start;
+  padding-top: 0.15rem;
+  color: var(--path-blue);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 0.7rem;
+  font-weight: 760;
+}
+
+.pathline-empty h3 {
+  margin: 0;
+  color: var(--path-ink);
+  font-size: clamp(1rem, 2.1vw, 1.25rem);
+  font-weight: 660;
+  letter-spacing: -0.025em;
+}
+
+.pathline-empty p {
+  max-width: 34rem;
+  margin: 0.35rem 0 0;
+  color: var(--path-muted);
+  font-size: 0.82rem;
+  line-height: 1.5;
+}
+
+@media (max-width: 720px) {
+  .pathline {
+    gap: 0.58rem;
+    padding: 0.72rem 0.75rem max(3.6rem, env(safe-area-inset-bottom));
+  }
+
+  .pathline-hero {
+    grid-template-columns: 1fr;
+    align-items: start;
+    gap: 0.65rem;
+  }
+
+  .pathline-hero h1 {
+    font-size: clamp(2.4rem, 12vw, 3.25rem);
+  }
+
+  .pathline-lede {
+    max-width: 24rem;
+    margin-top: 0.4rem;
+    font-size: 0.88rem;
+  }
+
+  .pathline-room-status {
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    padding: 0.58rem 0.68rem;
+  }
+
+  .pathline-room-status code {
+    grid-column: 3;
+    grid-row: 1 / span 2;
+    align-self: center;
+    max-width: 5.2rem;
+    padding: 0;
+    border: 0;
+    text-align: right;
+  }
+
+  .pathline-planning-card {
+    padding: 0.72rem;
+  }
+
+  .pathline-overview h2 {
+    font-size: 1.05rem;
+  }
+
+  .pathline-progress {
+    margin-block: 0.62rem;
+  }
+
+  .pathline-entry-form {
+    grid-template-columns: 1fr;
+    gap: 0.46rem;
+  }
+
+  .pathline-entry-form button {
+    width: 100%;
+  }
+
+  .pathline-timeline-header {
+    align-items: center;
+  }
+
+  .pathline-empty {
+    min-height: 9rem;
+    padding: 1rem;
+  }
+
+  .pathline-milestone {
+    grid-template-columns: 1.9rem minmax(0, 1fr);
+    gap: 0.58rem;
+    min-height: 4.2rem;
+    padding: 0.6rem;
+  }
+
+  .pathline-marker {
+    width: 1.85rem;
+    height: 1.85rem;
+  }
+
+  .pathline-toggle-label {
+    display: none;
+  }
+
+  .pathline-list li:not(:last-child)::before {
+    left: 1.2rem;
+  }
+}
+
+@media (max-height: 660px) and (min-width: 721px) {
+  .pathline {
+    gap: 0.45rem;
+    padding-block: 0.45rem max(3.3rem, env(safe-area-inset-bottom));
+  }
+
+  .pathline-hero h1 {
+    font-size: 2.25rem;
+  }
+
+  .pathline-lede {
+    margin-top: 0.35rem;
+    font-size: 0.86rem;
+  }
+
+  .pathline-room-status,
+  .pathline-planning-card {
+    padding: 0.62rem 0.72rem;
+  }
+
+  .pathline-progress {
+    margin-block: 0.52rem;
+  }
+
+  .pathline-entry-form input,
+  .pathline-entry-form button {
+    min-height: 2.45rem;
+  }
+
+  .pathline-empty {
+    min-height: 7.8rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
 }
