@@ -59,7 +59,7 @@ test("page loads with the planning action in focus", async ({ page }) => {
   // first viewport stays dedicated to the shared planning decision.
   await expect(page.getByRole("heading", { name: "Pathline" })).toBeVisible();
   await expect(page.getByLabel("Next milestone")).toBeVisible();
-  await expect(page.getByRole("button", { name: /create first milestone/i })).toBeVisible();
+  await expect(page.getByRole("button", { name: /(?:create first|add) milestone/i })).toBeVisible();
 
   // Allow a moment for async TURN fetch / WebRTC handshake; benign warnings
   // about TURN unreachable are OK, but real errors are not.
