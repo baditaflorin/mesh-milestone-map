@@ -50,19 +50,16 @@ async function openSettings(page: Page): Promise<Locator> {
  * console errors.
  */
 
-test("page loads with version + source + tip visible", async ({ page }) => {
+test("page loads with the planning action in focus", async ({ page }) => {
   const c = captureConsoleErrors(page);
   await page.goto("./");
   await closeInitiallyOpenSettings(page);
 
-  // Self-ref bar contains a "source" link, a "tip" link, and a version stamp.
-  await expect(page.getByRole("link", { name: /source/i }).first()).toBeVisible();
-  await expect(page.getByRole("link", { name: /tip/i }).first()).toBeVisible();
-  // Version stamp lives in the self-ref bar — mesh-common's class is
-  // `.mesh-self-ref`, legacy apps use `.self-ref`. Both render a `vN.N.N`
-  // string in that footer.
-  const versionLocator = page.locator(".mesh-self-ref, .self-ref").getByText(/^v\d/);
-  await expect(versionLocator.first()).toBeVisible();
+  // Modern product chrome keeps source/version in accessible Settings, so the
+  // first viewport stays dedicated to the shared planning decision.
+  await expect(page.getByRole("heading", { name: "Pathline" })).toBeVisible();
+  await expect(page.getByLabel("Next milestone")).toBeVisible();
+  await expect(page.getByRole("button", { name: /create first milestone/i })).toBeVisible();
 
   // Allow a moment for async TURN fetch / WebRTC handshake; benign warnings
   // about TURN unreachable are OK, but real errors are not.

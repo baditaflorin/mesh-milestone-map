@@ -13,6 +13,9 @@ export default defineConfig({
   timeout: 30_000,
   expect: { timeout: 5_000 },
   fullyParallel: false,
+  // Cross-peer CRDT tests deliberately share a Yjs room. Run the browser
+  // suite serially everywhere, including Woodpecker where CI may be unset.
+  workers: 1,
   reporter: process.env["CI"] ? "list" : [["list"], ["json", { outputFile: "test-results.json" }]],
   use: {
     baseURL,

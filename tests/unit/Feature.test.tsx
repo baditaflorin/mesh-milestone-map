@@ -1,24 +1,34 @@
 import { describe, expect, it } from "vitest";
-import { render, screen } from "@testing-library/react";
+import { fireEvent, render, screen } from "@testing-library/react";
 import { createMockRoom } from "@baditaflorin/mesh-common/testing";
 import { Feature } from "../../src/Feature";
 import { config } from "../../src/config";
 
-describe("Feature (component)", () => {
-  it("renders the app name when connected", () => {
+describe("Pathline planning surface", () => {
+  it("renders the human product name and a real first milestone action", () => {
     const room = createMockRoom();
     render(<Feature room={room} config={config} />);
-    // Most apps show their human label in an <h1>. Allow either the config
-    // appName or any first-level heading to be present.
-    const heading = screen.getAllByRole("heading", { level: 1 })[0];
-    expect(heading).toBeInTheDocument();
+    expect(screen.getByRole("heading", { level: 1, name: "Pathline" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Create first milestone" })).toBeDisabled();
   });
 
-  it("shows a connecting state when room is null", () => {
+  it("adds a milestone through the shared hook instead of a local-only list", () => {
+    const room = createMockRoom();
+    render(<Feature room={room} config={config} />);
+
+    fireEvent.change(screen.getByLabelText("Next milestone"), {
+      target: { value: "Align on the brief" },
+    });
+    fireEvent.click(screen.getByRole("button", { name: "Create first milestone" }));
+
+    expect(
+      screen.getByRole("button", { name: "Complete milestone: Align on the brief" }),
+    ).toHaveAttribute("aria-pressed", "false");
+    expect(screen.getByText("0 of 1 milestones complete")).toBeInTheDocument();
+  });
+
+  it("names an honest opening state before a room exists", () => {
     render(<Feature room={null} config={config} />);
-    // Most templates show "Connecting…" while the room is null. Apps with a
-    // custom waiting state can override this test.
-    const heading = screen.getAllByRole("heading", { level: 1 })[0];
-    expect(heading).toBeInTheDocument();
+    expect(screen.getByText("Opening the shared plan…")).toBeInTheDocument();
   });
 });
