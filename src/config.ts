@@ -4,6 +4,7 @@ const legacyRoomConfig = createMeshConfig({
   // Keep this stable legacy namespace so existing shared plans and room links
   // continue to meet the same Yjs document after the product visual refresh.
   appName: "Milestone Map",
+  breadcrumbs: false,
   displayName: "Pathline",
   visualProfile: "utility",
   shellLayout: "inset",
